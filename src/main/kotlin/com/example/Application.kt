@@ -1,8 +1,7 @@
 package com.example
 
 import com.example.controller.registerRouting
-import com.example.entity.AccTable
-import com.example.entity.RolesTable
+import com.example.entity.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import com.example.plugins.*
@@ -17,7 +16,7 @@ fun main() {
     embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
         Database.connect("jdbc:postgresql://localhost:5432/CurS", driver = "org.postgresql.Driver", user = "postgres", password = "IceToll_1")
         transaction {
-            SchemaUtils.createMissingTablesAndColumns(AccTable,RolesTable)
+            SchemaUtils.createMissingTablesAndColumns(AccTable,RolesTable,ApplictionUserTable,ContactTable,GroupTable,CategoryTable,EmpTable,StatusTable)
         }
         configureRouting()
         configureSecurity()
