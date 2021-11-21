@@ -17,6 +17,8 @@ repositories {
     mavenCentral()
 }
 
+
+val exposedVersion: String by project
 dependencies {
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-sessions:$ktor_version")
@@ -28,4 +30,9 @@ dependencies {
     implementation ("io.ktor:ktor-html-builder:$ktor_version")
     implementation ("io.ktor:ktor-freemarker:$ktor_version")
     implementation ("io.ktor:ktor-auth:$ktor_version")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+
+    implementation("org.postgresql:postgresql:42.2.2")
 }

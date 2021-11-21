@@ -1,5 +1,7 @@
 package com.example.plugins
 
+import com.example.entity.Acc
+import com.example.entity.AccTable
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.html.*
@@ -8,15 +10,18 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
 import kotlinx.html.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
-enum class ROLE{
-    USER,ADMIN
+enum class ROLE {
+    USER, ADMIN
 }
 
-data class UserSession(val name: String, val count: Int,val role:ROLE) : Principal
+data class UserSession(val name: String, val count: Int, val role: ROLE) : Principal
 
-val listAdmin = mapOf<Pair<String,String>,ROLE>(("IceToll" to "3242") to ROLE.ADMIN,
-    ("User" to "1111") to ROLE.USER)
+/*val listAdmin = mapOf<Pair<String,String>,ROLE>(("Eisverlust" to "2222") to ROLE.ADMIN,
+    ("User" to "1111") to ROLE.USER)*/
 
 fun Application.configureSecurity() {
     install(Sessions) {
@@ -32,16 +37,26 @@ fun Application.configureSecurity() {
             userParamName = "username"
             passwordParamName = "password"
             validate { credentials ->
-                if (listAdmin[credentials.name to credentials.password] !=null) {
-                    UserSession(credentials.name,1, listAdmin[credentials.name to credentials.password]!!)
-                } else {
-                    null
+                /* if (listAdmin[credentials.name to credentials.password] !=null) {
+                     UserSession(credentials.name,1, listAdmin[credentials.name to credentials.password]!!)
+                 } else {
+                     null
+                 }*/
+                newSuspendedTransaction {
+                    val acc = Acc.find {
+                        AccTable.name eq credentials.name and (AccTable.password eq credentials.password)
+                    }.singleOrNull()
+                    if (acc != null) {
+                        UserSession(credentials.name, 1, ROLE.valueOf(acc.roles.role))
+                    } else
+                        null
                 }
             }
+
         }
         session<UserSession>("user-session") {
             validate { session ->
-                if(session.name.isNotEmpty()) {
+                if (session.name.isNotEmpty()) {
                     session
                 } else {
                     null
@@ -54,7 +69,7 @@ fun Application.configureSecurity() {
 
         session<UserSession>("admin-session") {
             validate { session ->
-                if(session.name.isNotEmpty() && session.role ==ROLE.ADMIN) {
+                if (session.name.isNotEmpty() && session.role == ROLE.ADMIN) {
                     session
                 } else {
                     null
@@ -73,14 +88,17 @@ fun Application.configureSecurity() {
                 }
             }
         }
-    }
 //--------------------чтобы нахуй не присесть!---------------------------------------------------------------------------------------------
-
+    }
     routing {
         get("/login") {
             call.respondHtml {
                 body {
-                    form(action = "/login", encType = FormEncType.applicationXWwwFormUrlEncoded, method = FormMethod.post) {
+                    form(
+                        action = "/login",
+                        encType = FormEncType.applicationXWwwFormUrlEncoded,
+                        method = FormMethod.post
+                    ) {
                         p {
                             +"Username:"
                             textInput(name = "username")
@@ -92,6 +110,12 @@ fun Application.configureSecurity() {
                         p {
                             submitInput() { value = "Login" }
                         }
+                    }
+                    form(
+                        action="/registrtion"
+                    )
+                    {
+                        button { + "Registrtion" }
                     }
                 }
             }
@@ -105,7 +129,7 @@ fun Application.configureSecurity() {
             }
         }
 
-        authenticate("user-session","admin-session") {
+        authenticate("user-session", "admin-session") {
             get("/hello") {
                 val userSession = call.principal<UserSession>()
                 call.sessions.set(userSession?.copy(count = userSession.count + 1))
@@ -124,4 +148,6 @@ fun Application.configureSecurity() {
             call.respondRedirect("/login")
         }
     }
+
+
 }
