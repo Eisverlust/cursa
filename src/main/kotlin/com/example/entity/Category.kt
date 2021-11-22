@@ -1,6 +1,5 @@
 package com.example.entity
 
-import com.example.entity.StatusTable.uniqueIndex
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -13,5 +12,6 @@ object CategoryTable : IntIdTable("CategoryTable") {
 
 class Category(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Category>(CategoryTable)
-    var category   by CategoryTable.category
+
+    var category by CategoryTable.category
 }

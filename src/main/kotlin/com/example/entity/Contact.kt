@@ -1,6 +1,5 @@
 package com.example.entity
 
-import com.example.entity.AccTable.uniqueIndex
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -14,7 +13,8 @@ object ContactTable : IntIdTable("ContactTable") {
 
 class Contact(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Contact>(ContactTable)
-    var number     by ContactTable.number
+
+    var number by ContactTable.number
     var emp by Emp referencedOn ContactTable.emp
 }
 

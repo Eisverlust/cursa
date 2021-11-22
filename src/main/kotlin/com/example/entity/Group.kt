@@ -1,6 +1,5 @@
 package com.example.entity
 
-import com.example.entity.ContactTable.uniqueIndex
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -13,6 +12,7 @@ object GroupTable : IntIdTable("GroupTable") {
 
 class Group(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Group>(GroupTable)
-    var group   by GroupTable.group
+
+    var group by GroupTable.group
 }
 
