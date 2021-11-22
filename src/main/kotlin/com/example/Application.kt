@@ -16,7 +16,7 @@ fun main() {
     embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
         Database.connect("jdbc:postgresql://localhost:5432/CurS", driver = "org.postgresql.Driver", user = "postgres", password = "IceToll_1")
         transaction {
-            SchemaUtils.createMissingTablesAndColumns(AccTable,RolesTable,ApplictionUserTable,ContactTable,GroupTable,CategoryTable,EmpTable,StatusTable)
+            SchemaUtils.createMissingTablesAndColumns(AccTable,RolesTable,ApplictionUserTable,ContactTable,GroupTable,CategoryTable,EmpTable,StatusTable,UrgencyTable)
         }
         configureRouting()
         configureSecurity()

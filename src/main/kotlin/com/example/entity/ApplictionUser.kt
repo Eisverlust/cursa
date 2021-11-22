@@ -11,13 +11,19 @@ object ApplictionUserTable : IntIdTable("ApplictionUserTable") {
     val fio = varchar("fio", 50)
     val time = datetime("time")
     val address =  varchar("address", 100)
+    val status = reference("status", StatusTable)
+    val category = reference("category", CategoryTable)
+    val urgency = reference("urgency", UrgencyTable)
 
 }
 
 class ApplictionUser(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<ApplictionUser>(ApplictionUserTable)
     var text    by ApplictionUserTable.text
-    val fio by ApplictionUserTable.fio
-    val time by ApplictionUserTable.time
-    val address by ApplictionUserTable.address
+    var fio by ApplictionUserTable.fio
+    var time by ApplictionUserTable.time
+    var address by ApplictionUserTable.address
+    var status by Status referencedOn  ApplictionUserTable.status
+    var category by Status referencedOn ApplictionUserTable.category
+    var urgency by Status referencedOn ApplictionUserTable.urgency
 }
