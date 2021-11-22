@@ -8,7 +8,10 @@ import com.example.plugins.ROLE
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class Registration {
-     fun registration(name:String, pass:String){
+     fun registration(
+         name:String,
+         pass:String
+     ){
          transaction {
              Acc.new {
                  this.name = name

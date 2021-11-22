@@ -1,6 +1,8 @@
 package com.example.service
 
 import com.example.entity.*
+import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.LocalDateTime
 
@@ -32,6 +34,16 @@ class AppAdd {
                 }
 
             }
+        }
+    }
+    fun deleteApp(
+        id:Int
+    ) {
+        transaction {
+            ApplictionUserTable.deleteWhere { ApplictionUserTable.id eq id }
+            /////////////////////////////////////////////////////////////////////////
+            //////////////////Delete///////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////
         }
     }
 }
