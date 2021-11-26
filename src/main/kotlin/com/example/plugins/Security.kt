@@ -6,11 +6,11 @@ import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.html.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
 import kotlinx.html.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
@@ -27,7 +27,7 @@ fun Application.configureSecurity() {
     install(Sessions) {
         cookie<UserSession>("user_session") {
             cookie.path = "/"
-            cookie.maxAgeInSeconds = 150000
+            cookie.maxAgeInSeconds = 1500
         }
     }
 
@@ -53,20 +53,8 @@ fun Application.configureSecurity() {
                 }
             }
 
-        }
-        session<UserSession>("user-session") {
-            validate { session ->
-                if (session.name.isNotEmpty()) {
-                    session
-                } else {
-                    null
-                }
-            }
-            challenge {
-                call.respondRedirect("/login")
-            }
-        }
 
+        }
         session<UserSession>("admin-session") {
             validate { session ->
                 if (session.name.isNotEmpty() && session.role == ROLE.ADMIN) {
@@ -88,35 +76,77 @@ fun Application.configureSecurity() {
                 }
             }
         }
+        session<UserSession>("user-session") {
+            validate { session ->
+                if (session.name.isNotEmpty() && session.role == ROLE.USER) {
+                    session
+                } else {
+                    null
+                }
+            }
+            challenge {
+                call.respondRedirect("/login")
+            }
+        }
+
+
 //--------------------чтобы нахуй не присесть!---------------------------------------------------------------------------------------------
     }
     routing {
+        static {
+            resource("static/css/login.css","static/css/login.css")
+        }
         get("/login") {
             call.respondHtml {
-                body {
-                    form(
-                        action = "/login",
-                        encType = FormEncType.applicationXWwwFormUrlEncoded,
-                        method = FormMethod.post
-                    ) {
-                        p {
-                            +"Username:"
-                            textInput(name = "username")
-                        }
-                        p {
-                            +"Password:"
-                            passwordInput(name = "password")
-                        }
-                        p {
-                            submitInput() { value = "Login" }
-                        }
-                    }
-                    form(
-                        action="/registrtion"
+                head {
+                    link(
+                        href = "static/css/login.css"/* javaClass.classLoader.getResource("static/Color.css").toURI().path.drop(1)*/,
+                        rel = "stylesheet"
                     )
-                    {
-                        button { + "Registrtion" }
+
+                }
+                body {
+                    div("section") {
+                        div("imgBx") {
+                        }
+                        div("contentBx") {
+                            div("formBx") {
+                                h2 {
+                                    +"Login"
+                                }
+                                form {
+                                    div("inputBx") {
+                                        span {
+                                            +"Username"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
+                    /* form(
+                         action = "/login",
+                         encType = FormEncType.applicationXWwwFormUrlEncoded,
+                         method = FormMethod.post
+                     ) {
+                         p {
+                             +"Username:"
+                             textInput(name = "username")
+                         }
+                         p {
+                             +"Password:"
+                             passwordInput(name = "password")
+                         }
+                         p {
+                             submitInput() { value = "Login" }
+                         }
+                     }
+                     form(
+                         action="/registrtion"
+                     )
+                     {
+                         button { + "Registrtion" }*/
+                    //}
                 }
             }
         }
@@ -133,7 +163,16 @@ fun Application.configureSecurity() {
             get("/hello") {
                 val userSession = call.principal<UserSession>()
                 call.sessions.set(userSession?.copy(count = userSession.count + 1))
-                call.respondText("Hello, ${userSession?.name}! Visit count is ${userSession?.count}.")
+                call.respondHtml {
+                    body {
+                        if (userSession?.role == ROLE.ADMIN) {
+                            a {
+                                href = "/AdminPanel"
+                                +"Admin Menu"
+                            }
+                        }
+                    }
+                }
             }
         }
         authenticate("admin-session") {

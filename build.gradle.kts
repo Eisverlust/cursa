@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.statistics.ReportStatisticsToElasticSearch.url
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -15,6 +17,7 @@ application {
 
 repositories {
     mavenCentral()
+    maven {url= uri("https://jitpack.io") }
 }
 
 
@@ -35,4 +38,5 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.postgresql:postgresql:42.2.2")
+    implementation ("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.6")
 }

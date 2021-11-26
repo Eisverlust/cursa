@@ -13,7 +13,7 @@ import io.ktor.server.testing.*
 import com.example.plugins.*
 
 class ApplicationTest {
-    @Test
+
     fun testRoot() {
         withTestApplication({ configureRouting() }) {
             handleRequest(HttpMethod.Get, "/").apply {

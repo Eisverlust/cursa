@@ -1,0 +1,38 @@
+.class{
+    align-items: center;
+    background: #222;
+    display: grid;
+    grid-area: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 4vw;
+    color: azure;
+
+}
+.test {
+    align-items: center;
+    background: #171717;
+    min-height: 500px;
+    max-height: 500px;
+    border-radius: 25px;
+
+}
+.test2{
+    text-align: center
+}
+.hop{
+    margin: 15px;
+}
+
+.test:hover{
+    background: #3a2629;
+    transition: 0.2s;
+}
+
+
+.dives{
+    width: 100%;
+    border: 2px solid brown;
+    background: brown;
+    border-radius: 25px;
+
+}

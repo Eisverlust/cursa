@@ -12,8 +12,10 @@ fun Application.configureRouting() {
 
 
     routing {
-        static("/static") {
-            resources("static")
+        static {
+            resource("css/st.css","static/css/st.css")
+            resource("/","static/index.html")
+            resource("*","static/index.html")
         }
     }
 }

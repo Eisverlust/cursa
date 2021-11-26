@@ -16,7 +16,9 @@ class Registration {
              Acc.new {
                  this.name = name
                  this.password = pass
-                 this.roles = Roles.find { RolesTable.role eq ROLE.USER.name }.single()
+                 this.roles = Roles.find { RolesTable.role eq ROLE.USER.name }.singleOrNull() ?:Roles.new {
+                     role = ROLE.USER.name
+                 }
              }
          }
      }

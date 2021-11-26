@@ -3,6 +3,7 @@ package com.example.controller
 import com.example.service.Registration
 import io.ktor.application.*
 import io.ktor.html.*
+import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.routing.*
 import kotlinx.html.*
@@ -11,16 +12,27 @@ fun Application.registerRouting(){
 
     val service = Registration()
 
+
     routing {
+        static {
+            resource("static/css/Color.css","static/css/Color.css")
+        }
         get("/registrtion") {
             call.respondHtml {
-                body {
+                head {
+                    link(
+                        href ="static/css/Color.css"/* javaClass.classLoader.getResource("static/Color.css").toURI().path.drop(1)*/,
+                        rel = "stylesheet"
+                    )
+
+                }
+                body(classes = "class") {
                     form(
                         action = "/registrtion",
                         encType = FormEncType.applicationXWwwFormUrlEncoded,
                         method = FormMethod.post
                     ) {
-                        p {
+                        p(classes = "class") {
                             +"Username:"
                             textInput(name = "username")
                         }
