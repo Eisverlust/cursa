@@ -21,7 +21,7 @@ fun Routing.addAppController() {
 
     route("app") {
         static {
-            resource("static/css/Color.css","static/css/Color.css")
+            resource("static/css/Color.css", "static/css/Color.css")
         }
         authenticate("user-session", "admin-session") {
             post("add") {
@@ -48,58 +48,89 @@ fun Routing.addAppController() {
                             href = "static/css/Color.css"/* javaClass.classLoader.getResource("static/Color.css").toURI().path.drop(1)*/,
                             rel = "stylesheet"
                         )
-
                     }
-                    body(classes = "class") {
-                        form(
-                            action = "/app/add",
-                            encType = FormEncType.applicationXWwwFormUrlEncoded,
-                            method = FormMethod.post
-                        ) {
-                            p(classes = "class") {
-                                +"Text:"
-                                textInput(name = "Text") {
-                                    pattern = ".{1,}"
-                                    this.required = true
+                    body("mycss2") {
+                        div("mycss2"){
+                            form(
+                                action = "/app/add",
+                                encType = FormEncType.applicationXWwwFormUrlEncoded,
+                                method = FormMethod.post
+
+                            ) {
+
+                              /*  p("mycss") {
+                                    +"Text:"
+                                    textInput(name = "Text") {
+                                        pattern = ".{1,}"
+                                        this.required = true
+                                    }
                                 }
-                            }
-                            p {
-                                +"address"
-                                textInput(name = "address") {
-                                    pattern = ".{1,}"
-                                    this.required = true
+*/
+
+
+                                div("mycss") {
+                                    span {
+                                        +"Text "
+                                    }
+                                    textInput(name = "Text") {
+                                        pattern = ".{1,}"
+                                        this.required = true
+                                    }
                                 }
-                            }
-                            p{
-                                +"phone"
-                                textInput(name = "phone") {
-                                    //Нужно добавить патерн
+                                p("mycss") {
+                                    +"address "
+                                    textInput(name = "address") {
+                                        pattern = ".{1,}"
+                                        this.required = true
+                                    }
                                 }
+
+                                p("mycss") {
+                                    +"phone "
+                                    textInput(name = "phone") {
+                                        //Нужно добавить патерн
+                                    }
+                                }
+                                select() {
+                                    name = "category"
+                                    categories().map {
+                                        option {
+                                            +it.category
+                                        }
+                                    }
+                                }
+
+                                select {
+                                    name = "urgency"
+                                    urga().map {
+                                        option {
+                                            +it.urgency
+                                        }
+                                    }
+                                }
+                                submitInput {}
                             }
-                            select() {
-                                name = "category"
-                                categories().map {
-                                    option {
-                                        +it.category
+                            form(
+                                action = "/",
+                                encType = FormEncType.applicationXWwwFormUrlEncoded,
+                                method = FormMethod.get
+                            ) {
+                                div ("inputBx") {
+                                    submitInput() {
+                                        value = "Вернутся на главную"
+
                                     }
                                 }
                             }
-                            select {
-                                name = "urgency"
-                                urga().map {
-                                    option {
-                                        +it.urgency
-                                    }
-                                }
-                            }
-                            submitInput {}
                         }
                     }
                 }
             }
         }
     }
+
 }
+
 
 
 fun categories(): List<Category> {

@@ -40,6 +40,18 @@ fun Application.adminPanel() {
 
                     }
                     body {
+                        form(
+                            action = "/",
+                            encType = FormEncType.applicationXWwwFormUrlEncoded,
+                            method = FormMethod.get
+                        ) {
+                            div ("inputBx") {
+                                submitInput() {
+                                    value = "Вернутся на главную"
+
+                                }
+                            }
+                        }
                         h2 {
                             +"Соотношение работы"
                         }
@@ -89,10 +101,12 @@ fun Application.adminPanel() {
                                             }
                                         }
                                     }
+
                                 }
                             }
                         }
                     }
+
                 }
             }
         }

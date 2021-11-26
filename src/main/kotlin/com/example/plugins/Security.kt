@@ -65,17 +65,35 @@ fun Application.configureSecurity() {
             }
             challenge {
                 call.respondHtml(status = HttpStatusCode.Forbidden) {
+                    head {
+                        link(
+                            href = "static/css/login.css"/* javaClass.classLoader.getResource("static/Color.css").toURI().path.drop(1)*/,
+                            rel = "stylesheet"
+                        )
+
+                    }
                     body {
+
                         h1 {
-                            text("Иди на ...")
+                            text("Недостаточно прав")
                         }
-                        button() {
-                            "Дя"
+                        form(
+                            action = "/",
+                            encType = FormEncType.applicationXWwwFormUrlEncoded,
+                            method = FormMethod.get
+                        ) {
+                          div ("inputBx") {
+                                submitInput() {
+                                    value = "Вернутся на главную"
+
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+
         session<UserSession>("user-session") {
             validate { session ->
                 if (session.name.isNotEmpty() && session.role == ROLE.USER) {
@@ -94,7 +112,7 @@ fun Application.configureSecurity() {
     }
     routing {
         static {
-            resource("static/css/login.css","static/css/login.css")
+            resource("static/css/login.css", "static/css/login.css")
         }
         get("/login") {
             call.respondHtml {
@@ -114,10 +132,47 @@ fun Application.configureSecurity() {
                                 h2 {
                                     +"Login"
                                 }
-                                form {
+                                form(
+                                    action = "/login",
+                                    encType = FormEncType.applicationXWwwFormUrlEncoded,
+                                    method = FormMethod.post
+                                ) {
                                     div("inputBx") {
                                         span {
-                                            +"Username"
+                                            +"Логин"
+                                        }
+                                        textInput(name = "username") {
+
+                                        }
+                                    }
+                                    div("inputBx") {
+                                        span {
+                                            +"Пароль"
+                                        }
+                                        passwordInput(name = "password") {
+
+                                        }
+                                    }
+                                    div("remember") {
+                                        label {
+                                            checkBoxInput {
+                                                +"Запомнить меня"
+                                            }
+                                        }
+                                    }
+                                    div("inputBx") {
+                                        submitInput() {
+                                            value = "Войти"
+
+                                        }
+                                    }
+                                    div("inputBx") {
+                                        p {
+                                            +"Еще нет аккаунта? "
+                                            a {
+                                                href = "/registrtion"
+                                                +"Создать"
+                                            }
                                         }
                                     }
                                 }
@@ -155,7 +210,7 @@ fun Application.configureSecurity() {
             post("/login") {
                 val userName = call.principal<UserSession>()
                 call.sessions.set(UserSession(name = userName!!.name, count = 1, userName!!.role))
-                call.respondRedirect("/hello")
+                call.respondRedirect("/")
             }
         }
 
@@ -186,7 +241,10 @@ fun Application.configureSecurity() {
             call.sessions.clear<UserSession>()
             call.respondRedirect("/login")
         }
+
+        get("/login"){
+            call.respondRedirect("/")
+        }
     }
-
-
 }
+

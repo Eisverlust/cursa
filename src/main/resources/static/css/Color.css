@@ -36,3 +36,28 @@
     border-radius: 25px;
 
 }
+
+.mycss{
+    width: 100%;
+    padding: 10px 20px;
+    outline: none;
+    font-weight: 400;
+    border: 1px solid #607d8b;
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: #ffffff;
+    background: transparent;
+    border-radius: 30px;
+}
+.mycss2{
+    width: 100%;
+    padding: 10px 20px;
+    outline: none;
+    font-weight: 400;
+    border: 1px solid #607d8b;
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: #ffffff;
+    background: #0e0e0e;
+    border-radius: 30px;
+}

@@ -5,6 +5,7 @@ import io.ktor.application.*
 import io.ktor.html.*
 import io.ktor.http.content.*
 import io.ktor.request.*
+import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.html.*
 
@@ -51,6 +52,7 @@ fun Application.registerRouting(){
             val microDto = call.receiveParameters()
             service.registration(microDto["username"].toString(),microDto["password"].toString())
             println(microDto)
+            call.respondRedirect("/login")
         }
     }
 }

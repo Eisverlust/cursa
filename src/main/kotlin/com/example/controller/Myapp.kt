@@ -28,13 +28,28 @@ fun Application.myApp() {
                 val user = call.principal<UserSession>()
                 call.respondHtml {
                     head {
+
                         link(
                             href = "static/css/Color.css"/* javaClass.classLoader.getResource("static/Color.css").toURI().path.drop(1)*/,
                             rel = "stylesheet"
                         )
 
                     }
+
                     body(classes = "class") {
+                        form(
+                            action = "/",
+                            encType = FormEncType.applicationXWwwFormUrlEncoded,
+                            method = FormMethod.get
+                        ) {
+                            div ("inputBx") {
+                                submitInput() {
+                                    value = "Вернутся на главную"
+
+                                }
+                            }
+                        }
+
                         service.muApplicationList(user!!.name).forEach {
                             div("test") {
                                 div("test2") {
@@ -91,6 +106,7 @@ fun Application.myApp() {
                                 }
                             }
                         }
+
                     }
                 }
             }
