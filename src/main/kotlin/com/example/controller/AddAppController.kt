@@ -21,7 +21,7 @@ fun Routing.addAppController() {
 
     route("app") {
         static {
-            resource("static/css/Color.css", "static/css/Color.css")
+            resource("static/css/addApp.css", "static/css/addApp.css")
         }
         authenticate("user-session", "admin-session") {
             post("add") {
@@ -45,12 +45,87 @@ fun Routing.addAppController() {
 
                     head {
                         link(
-                            href = "static/css/Color.css"/* javaClass.classLoader.getResource("static/Color.css").toURI().path.drop(1)*/,
+                            href = "static/css/addApp.css"/* javaClass.classLoader.getResource("static/Color.css").toURI().path.drop(1)*/,
                             rel = "stylesheet"
                         )
                     }
-                    body("mycss2") {
-                        div("mycss2"){
+                    body {
+                        div {
+                            form(
+                                action = "/app/add",
+                                encType = FormEncType.applicationXWwwFormUrlEncoded,
+                                method = FormMethod.post
+                            ) {
+
+
+                            div("container") {
+                                h2 {
+                                    +"Ваша заявка"
+                                }
+
+                                form {
+                                    div("inputBox") {
+                                        h4 {
+                                            +"Категория и срочность"
+                                        }
+                                        select() {
+
+                                            name = "category"
+                                            categories().map {
+                                                option {
+                                                    +it.category
+                                                }
+                                            }
+
+                                        }
+                                        select {
+
+                                            name = "urgency"
+                                            urga().map {
+                                                option {
+                                                    +it.urgency
+                                                }
+                                            }
+                                        }
+                                    }
+                                    div("inputBox") {
+                                        textInput(name = "Text") {
+                                            pattern = ".{1,}"
+                                            this.required = true
+                                        }
+                                        span {
+                                            +"Описание"
+                                        }
+                                    }
+                                    div("inputBox") {
+                                        textInput(name = "address") {
+                                            pattern = ".{1,}"
+                                            this.required = true
+                                        }
+                                        span {
+                                            +"Адрес"
+                                        }
+                                    }
+                                    div("inputBox") {
+                                        textInput(name = "phone") {
+                                            this.required = true
+                                        }
+                                        span {
+                                            +"Номер телефона"
+                                        }
+                                    }
+                                    div("inputBox") {
+                                        submitInput {
+                                            value = "Отправить заявку"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        }
+                    }
+                    /*body("mycss2") {
+                        div("mycss2") {
                             form(
                                 action = "/app/add",
                                 encType = FormEncType.applicationXWwwFormUrlEncoded,
@@ -58,14 +133,14 @@ fun Routing.addAppController() {
 
                             ) {
 
-                              /*  p("mycss") {
+                                p("mycss") {
                                     +"Text:"
                                     textInput(name = "Text") {
                                         pattern = ".{1,}"
                                         this.required = true
                                     }
                                 }
-*/
+
 
 
                                 div("mycss") {
@@ -115,7 +190,7 @@ fun Routing.addAppController() {
                                 encType = FormEncType.applicationXWwwFormUrlEncoded,
                                 method = FormMethod.get
                             ) {
-                                div ("inputBx") {
+                                div("inputBx") {
                                     submitInput() {
                                         value = "Вернутся на главную"
 
@@ -123,14 +198,12 @@ fun Routing.addAppController() {
                                 }
                             }
                         }
-                    }
+                    }*/
                 }
             }
         }
     }
-
 }
-
 
 
 fun categories(): List<Category> {

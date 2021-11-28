@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.javatime.datetime
 object MagazineTable : IntIdTable("MagazineTable") {
     val date = datetime("date")
     val emp = reference("emp", EmpTable,onDelete = ReferenceOption.CASCADE)
-    val applicationUser = reference("applicationUser", ApplicationUserTable, onDelete = ReferenceOption.CASCADE)
+    val applicationUser = reference("applicationUser", ApplicationUserTable, onDelete = ReferenceOption.CASCADE).uniqueIndex()
     // добавить --- уже :D
 init {
     uniqueIndex(emp,applicationUser)
