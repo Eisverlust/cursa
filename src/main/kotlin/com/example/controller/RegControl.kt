@@ -16,24 +16,61 @@ fun Application.registerRouting(){
 
     routing {
         static {
-            resource("static/css/Color.css","static/css/Color.css")
+            resource("static/css/login.css","static/css/login.css")
         }
         get("/registrtion") {
             call.respondHtml {
                 head {
                     link(
-                        href ="static/css/Color.css"/* javaClass.classLoader.getResource("static/Color.css").toURI().path.drop(1)*/,
+                        href ="static/css/login.css"/* javaClass.classLoader.getResource("static/Color.css").toURI().path.drop(1)*/,
                         rel = "stylesheet"
                     )
 
                 }
-                body(classes = "class") {
-                    form(
+                body() {
+                    div("section"){
+                        div("imgBx") {
+                        }
+                        div ("contentBx") {
+                            div ("formBx"){
+                                h2 {
+                                   +"Registration"
+                                }
+                                form(action = "/registrtion",
+                                    encType = FormEncType.applicationXWwwFormUrlEncoded,
+                                    method = FormMethod.post) {
+                                    div("inputBx") {
+                                        span {
+                                            +"Логин"
+                                        }
+                                        textInput(name = "username") {
+
+                                        }
+                                    }
+                                    div("inputBx") {
+                                        span {
+                                            +"Пароль"
+                                        }
+                                        passwordInput(name = "password") {
+
+                                        }
+                                    }
+                                    div("inputBx") {
+                                        submitInput() {
+                                            value = "Зарегистрироватся"
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    /*form(
                         action = "/registrtion",
                         encType = FormEncType.applicationXWwwFormUrlEncoded,
                         method = FormMethod.post
                     ) {
-                        p(classes = "class") {
+                        p() {
                             +"Username:"
                             textInput(name = "username")
                         }
@@ -44,7 +81,7 @@ fun Application.registerRouting(){
                         p {
                             submitInput() { value = "Registration" }
                         }
-                    }
+                    }*/
                 }
             }
         }

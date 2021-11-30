@@ -35,20 +35,24 @@ fun Application.myApp() {
                         )
 
                     }
-
-                    body(classes = "class") {
+                    body {
                         form(
                             action = "/",
                             encType = FormEncType.applicationXWwwFormUrlEncoded,
                             method = FormMethod.get
                         ) {
-                            div ("inputBx") {
+                            div {
                                 submitInput() {
                                     value = "Вернутся на главную"
 
                                 }
                             }
                         }
+                    }
+
+
+                    body(classes = "class") {
+
 
                         service.muApplicationList(user!!.name).forEach {
                             div("test") {
