@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.datetime
 
 object ApplicationUserTable : IntIdTable("ApplicationUserTable") {
-    val text = varchar("text", 50)
+    val text = varchar("text", 300)
     val fio = varchar("fio", 50)
     val phone = varchar("phone", 50)
     val time = datetime("time")

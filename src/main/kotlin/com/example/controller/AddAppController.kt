@@ -89,8 +89,10 @@ fun Routing.addAppController() {
                                         }
                                     }
                                     div("inputBox") {
-                                        textInput(name = "Text") {
-                                            pattern = ".{1,}"
+                                        textArea {
+                                            this.name = "Text"
+                                            maxLength = "300"
+                                            /*pattern = ".{1,}"*/
                                             this.required = true
                                         }
                                         span {
@@ -99,6 +101,7 @@ fun Routing.addAppController() {
                                     }
                                     div("inputBox") {
                                         textInput(name = "address") {
+                                            maxLength = "50"
                                             pattern = ".{1,}"
                                             this.required = true
                                         }
@@ -108,6 +111,7 @@ fun Routing.addAppController() {
                                     }
                                     div("inputBox") {
                                         textInput(name = "phone") {
+                                            maxLength = "50"
                                             this.required = true
                                         }
                                         span {

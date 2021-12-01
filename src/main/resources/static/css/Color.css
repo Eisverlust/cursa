@@ -1,6 +1,11 @@
+
+body
+{
+    background: #3f3752;
+}
+
 .class{
     align-items: center;
-    background: #222;
     display: grid;
     grid-area: auto;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -10,30 +15,37 @@
 }
 .test {
     align-items: center;
-    background: #171717;
+    background: #51446e;
     min-height: 500px;
     max-height: 500px;
     border-radius: 25px;
+    transition: 0.2s;
+    border: 5px #111111;
+
+
 
 }
 .test2{
-    text-align: center
+    text-align: center;
+    transition: 0.2s;
 }
 .hop{
     margin: 15px;
 }
 
 .test:hover{
-    background: #3a2629;
+    border: 5px #111111;
+    background: #ffb508;
     transition: 0.2s;
+    color: #111;
 }
 
 
 .dives{
     width: 100%;
-    border: 2px solid brown;
-    background: brown;
+    background: #43f390;
     border-radius: 25px;
+    color: #111111;
 
 }
 

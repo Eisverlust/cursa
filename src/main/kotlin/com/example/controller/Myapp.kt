@@ -51,67 +51,69 @@ fun Application.myApp() {
                     }
 
 
-                    body(classes = "class") {
+
+                        body(classes = "class") {
 
 
-                        service.muApplicationList(user!!.name).forEach {
-                            div("test") {
-                                div("test2") {
-                                    h3 {
-                                        +"Заявка ${it.id}"
+                            service.muApplicationList(user!!.name).forEach {
+                                div("test") {
+                                    div("test2") {
+                                        h3 {
+                                            +"Заявка ${it.id}"
+                                        }
+                                        a {
+                                            href = "/back?id=${it.id}"
+                                            +"Удалить"
+                                        }
                                     }
-                                    a{
-                                        href="/back?id=${it.id}"
-                                        +"Удалить"
-                                    }
-                                }
-                                div("hop") {
-                                    h4 {
-                                        +"Описание"
-                                    }
-                                    p {
-                                        +it.text
-                                    }
-                                    h4 {
-                                        +"адресс"
-                                    }
-                                    p {
-                                        +it.address
-                                    }
-                                    h4 {
-                                        +"Статус"
-                                    }
-                                    p {
-                                        +it.status
-                                    }
-                                    h4 {
-                                        +"Категория"
-                                    }
-                                    p {
-                                        +it.category
-                                    }
-                                    h4 {
-                                        +"Срочно"
-                                    }
-                                    p {
-                                        +it.urgency
-                                    }
-
-                                }
-                                div("dives") {
-                                    h3{
-                                        +"Коментарии:"
-                                    }
-                                    it.listComment?.forEach {
+                                    div("hop") {
+                                        h4 {
+                                            +"Описание"
+                                        }
                                         p {
-                                            +it
+                                            +it.text
+                                        }
+                                        h4 {
+                                            +"адресс"
+                                        }
+                                        p {
+                                            +it.address
+                                        }
+                                        h4 {
+                                            +"Статус"
+                                        }
+                                        p {
+                                            +it.status
+                                        }
+                                        h4 {
+                                            +"Категория"
+                                        }
+                                        p {
+                                            +it.category
+                                        }
+                                        h4 {
+                                            +"Срочно"
+                                        }
+                                        p {
+                                            +it.urgency
+                                        }
+
+                                    }
+                                    div("dives") {
+                                        h3 {
+                                            +"Коментарии:"
+                                        }
+                                        it.listComment?.forEach {
+                                            p {
+                                                +it
+                                            }
                                         }
                                     }
                                 }
                             }
+
                         }
 
-                    }
                 }
             }
         }
