@@ -100,7 +100,17 @@ object BotService {
                         val chatId = callbackQuery.message?.chat?.id ?: return@callbackQuery
                         appViewService.acceptApp(finalResultID, chatId.toString())
                         /*            bot.sendMessage(ChatId.fromId(chatId), text = callbackQuery.message!!.messageId.toString())*/
-                        bot.sendMessage(ChatId.fromId(chatId), text = "Заявка принята")
+                        val inlineKeyboardMarkup2 = InlineKeyboardMarkup.create(
+                            listOf(
+                                InlineKeyboardButton.CallbackData(text = "Завершить", callbackData = "complete"),
+                                InlineKeyboardButton.CallbackData(text = "Отменить", callbackData = "error")
+                            )
+                        )
+                        val meess = appViewService.showAcceptedApp(chatId = message.chat.id)
+                        bot.sendMessage(
+                            ChatId.fromId(message.chat.id), text = meess.toString(),
+                            replyMarkup = inlineKeyboardMarkup2
+                        )
                         /* bot.sendMessage(ChatId.fromId(chatId), text = "${callbackQuery.message!!.text}")*/
                         bot.deleteMessage(ChatId.fromId(chatId), callbackQuery.message!!.messageId)
 
@@ -129,11 +139,17 @@ object BotService {
         command("acceptedApp") {
             if (isReg(message.chat.id.toString())) {
                 val meess = appViewService.showAcceptedApp(chatId = message.chat.id)
+                if (meess.first != null)
                 bot.sendMessage(
                     ChatId.fromId(message.chat.id), text = meess.toString(),
                     replyMarkup = inlineKeyboardMarkup
                 )
+                else
+                    bot.sendMessage( ChatId.fromId(message.chat.id),
+                        text = "Активных заявок нет")
             }
+            else
+                notAuth(message.chat.id)
         }
         callbackQuery("complete") {
             val result = idAppView.find(callbackQuery.message?.text!!)?.value
@@ -172,13 +188,17 @@ object BotService {
 
     fun Dispatcher.commentary() {
         command("c") {
-            if (args.isNotEmpty()) {
-                val comm2 = args.joinToString()
-                appViewService.commentary(message.chat.id, comm2)
-                bot.sendMessage(ChatId.fromId(message.chat.id), text = "Коментарий оставлен")
-            } else {
-                bot.sendMessage(ChatId.fromId(message.chat.id), text = "Коментарий не может быть пустым")
+            if (isReg(message.chat.id.toString())) {
+                if (args.isNotEmpty()) {
+                    val comm2 = args.joinToString()
+                    appViewService.commentary(message.chat.id, comm2)
+                    bot.sendMessage(ChatId.fromId(message.chat.id), text = "Коментарий оставлен")
+                } else {
+                    bot.sendMessage(ChatId.fromId(message.chat.id), text = "Коментарий не может быть пустым")
+                }
             }
+            else
+                notAuth(message.chat.id)
         }
     }
 }

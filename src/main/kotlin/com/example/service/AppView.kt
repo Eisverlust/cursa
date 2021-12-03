@@ -44,7 +44,7 @@ class AppView {
         }
     }
 
-    fun showAcceptedApp(chatId: Long): Pair<String, LocalDateTime> {
+    fun showAcceptedApp(chatId: Long): Pair<String?, LocalDateTime?> {
         return transaction {
             val empID = Emp.findByUUID(chatId.toString())
             println(empID?.id)
@@ -55,10 +55,13 @@ class AppView {
                 ApplicationUser::status,
                 ApplicationUser::category,
                 ApplicationUser::urgency
-            ).maxByOrNull { it.date }
+            ).filter {
+                it.applicationUser.status.status != STATUS.Complete.rusName()
+            }.maxByOrNull { it.date }
             println(app)
             println("--------------")
-            return@transaction Pair(app?.applicationUser.toString() ?: "-1", app?.date ?: LocalDateTime.now())
+            return@transaction if (app !=null) Pair(app?.applicationUser.toString(), app?.date ?: LocalDateTime.now())
+                else Pair(null,null)
         }
     }
 

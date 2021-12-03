@@ -1,21 +1,33 @@
 package com.example.controller
 
+import com.example.doscAPI.test
+import com.example.plugins.UserSession
 import com.example.service.AdminService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.html.*
+import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.sessions.*
 import kotlinx.html.*
 
 fun Application.adminPanel() {
 
     val service = AdminService()
 
+    fun getDocs(): ByteArray {
+        return test(
+            service.countApplication().toInt(),
+            service.countAcceptApp().toInt(), service.countExecuteApp().toInt(), service.listEmployer()
+        )
+
+    }
+
     routing {
         static {
-            resource("static/css/Color.css","static/css/Color.css")
+            resource("static/css/Color.css", "static/css/Color.css")
         }
         authenticate("admin-session") {
             get("remove") {
@@ -23,14 +35,25 @@ fun Application.adminPanel() {
                 service.removeEmployer(id!!.toInt())
                 call.respondRedirect("/AdminPanel")
             }
+            get("docs") {
+                call.response.header(
+                    HttpHeaders.ContentDisposition,
+                    ContentDisposition.Attachment.withParameter(ContentDisposition.Parameters.FileName, "отчет.docx")
+                        .toString()
+                )
+                call.respondBytes(getDocs())
+            }
             get("/AdminPanel") {
                 val countApp = service.countApplication()
                 val countExecuteApp = service.countExecuteApp()
                 val percent = if (countApp != 0.0 && countExecuteApp != 0.0)
-                        ( countExecuteApp/countApp) * 100
+                    (countExecuteApp / countApp) * 100
                 else if (countApp != 0.0)
                     0
                 else 100
+                val userSession = call.principal<UserSession>()
+                call.sessions.set(userSession?.copy(count = userSession.count + 1))
+                /*Hello, ${userSession?.name}*/
                 call.respondHtml {
                     head {
                         link(
@@ -41,13 +64,39 @@ fun Application.adminPanel() {
                     }
                     body {
                         form(
+                            classes = "out",
+                            action = "/logout",
+                            encType = FormEncType.applicationXWwwFormUrlEncoded,
+                            method = FormMethod.get
+                        ) {
+                            div("inputBx") {
+                                submitInput() {
+                                    value = "${userSession?.name} Выйти"
+
+                                }
+                            }
+                        }
+                        form(
                             action = "/",
                             encType = FormEncType.applicationXWwwFormUrlEncoded,
                             method = FormMethod.get
                         ) {
-                            div ("inputBx") {
+                            div("inputBx") {
                                 submitInput() {
                                     value = "Вернутся на главную"
+
+                                }
+                            }
+                        }
+
+                        form(
+                            action = "/docs",
+                            encType = FormEncType.applicationXWwwFormUrlEncoded,
+                            method = FormMethod.get
+                        ) {
+                            div("inputBx") {
+                                submitInput() {
+                                    value = "Сохранить отчет"
 
                                 }
                             }
@@ -79,8 +128,11 @@ fun Application.adminPanel() {
                                         href = "/remove?id=${it.id}"
                                         +"удалить"
                                     }
-                                    p{
-                                        +"выполнено ${((service.empPercent(it.id))/countApp) *100}%"
+                                    p {
+                                        val res = service.empPercentifnull(it.id)?.let {
+                                            it/countApp *100
+                                        } ?: 0
+                                        +"выполнено ${res}%"
                                     }
                                     p {
                                         +it.fio

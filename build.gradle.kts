@@ -39,4 +39,6 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.postgresql:postgresql:42.2.2")
     implementation ("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.6")
+    implementation("org.apache.poi:poi-ooxml:5.1.0")
+
 }

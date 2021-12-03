@@ -11,6 +11,7 @@ import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.sessions.*
 import kotlinx.html.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.LocalDateTime
@@ -40,6 +41,8 @@ fun Routing.addAppController() {
                 call.respondRedirect("/")
             }
             get("add") {
+                val userSession = call.principal<UserSession>()
+                call.sessions.set(userSession?.copy(count = userSession.count + 1))
 
                 call.respondHtml {
 
@@ -50,6 +53,10 @@ fun Routing.addAppController() {
                         )
                     }
                     body {
+                        div("out") {
+                            onClick = "location.href='/logout'"
+                            +"${userSession?.name} .выйти"
+                        }
                         div {
                             form(
                                 action = "/app/add",

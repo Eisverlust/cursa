@@ -52,7 +52,9 @@ fun Application.configureSecurity() {
                         null
                 }
             }
-
+            challenge {
+                call.respondRedirect("/login")
+            }
 
         }
         session<UserSession>("admin-session") {
@@ -123,6 +125,7 @@ fun Application.configureSecurity() {
                     )
 
                 }
+
                 body {
                     div("section") {
                         div("imgBx") {
@@ -234,7 +237,7 @@ fun Application.configureSecurity() {
             get("/admin") {
                 val userSession = call.principal<UserSession>()
                 call.sessions.set(userSession?.copy(count = userSession.count + 1))
-                call.respondText("Hello, ${userSession?.name} Admin.")
+                call.respondText("Hello, ${userSession?.name}")
             }
         }
         get("/logout") {

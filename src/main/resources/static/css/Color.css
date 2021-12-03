@@ -3,8 +3,20 @@ body
 {
     background: #3f3752;
 }
+.home{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.out{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
 
 .class{
+
     align-items: center;
     display: grid;
     grid-area: auto;
@@ -14,6 +26,7 @@ body
 
 }
 .test {
+
     align-items: center;
     background: #51446e;
     min-height: 500px;

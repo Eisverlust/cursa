@@ -8,6 +8,7 @@ import io.ktor.html.*
 import io.ktor.http.content.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.sessions.*
 import kotlinx.html.*
 
 fun Application.myApp() {
@@ -37,6 +38,7 @@ fun Application.myApp() {
                     }
                     body {
                         form(
+                            classes = "home",
                             action = "/",
                             encType = FormEncType.applicationXWwwFormUrlEncoded,
                             method = FormMethod.get
@@ -53,13 +55,16 @@ fun Application.myApp() {
 
 
                         body(classes = "class") {
+                            br {
+
+                            }
 
 
                             service.muApplicationList(user!!.name).forEach {
                                 div("test") {
                                     div("test2") {
                                         h3 {
-                                            +"Заявка ${it.id}"
+                                            +"Заявка ${it.id} ${user?.name} "
                                         }
                                         a {
                                             href = "/back?id=${it.id}"

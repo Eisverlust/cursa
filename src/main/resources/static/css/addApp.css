@@ -12,6 +12,14 @@ body{
     background: linear-gradient(45deg,#ff4584,#03a9f4);
 }
 
+.out{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 13px;
+    color: white;
+}
+
 .container{
     position: relative;
     padding: 70px 40px;
